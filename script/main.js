@@ -241,23 +241,50 @@ require(["./script/lib/countdown.js"], function () {
             game.state.start("preload");
           };
         };
-        this.states.preload = function (game) {
+        states.preload = function (game) {
           this.preload = function (game) {
-            //加载图片
-            game.load.image("bgRainer",rain.bgRainer);
-            game.load.spritesheet("redpacket", rain.redpacket, 144, 173, 2);
-            game.load.image("close", rain.close);
-            game.load.image("dialogExit", rain.dialogExit);
-            game.load.image("buttonExit", rain.buttonExit);
-            game.load.image("openRedpacket", rain.openRedpacket);
-            game.load.image("open", rain.open);
-            game.load.image("buttonContinue", rain.buttonContinue);
-            game.load.image("prizeImg", rain.prizeImg);
+              //加载图片
+              game.load.image('rainerBg', rainerBg);
+              game.load.spritesheet('redpacket', redpacket, 144, 173, 2);
+              game.load.image('close', close);
+              game.load.image('dialogExitBg', dialogExitBg);
+              game.load.image('buttonExit', buttonExit);
+              game.load.image('openRedpacket', openRedpacket);
+              game.load.image('open', open);
+              game.load.image('buttonContinue', buttonContinue);
+
+              prizeImgArr.forEach(function(prize, index) {
+                  game.load.image('prizeImg'+ index, prize);
+              })
+
+              game.load.onLoadStart.add(this.loadStart, this);
+              game.load.onFileComplete.add(this.fileComplete, this);
+              game.load.onLoadComplete.add(this.loadComplete, this);
+              this.preparing = game.add.text(0, 0, '', { font : "30px londrina", fill: '#a26829' });
           };
+
+          this.loadStart = function() {
+              console.log('loadStart');
+          }
+
+          this.fileComplete = function(progress, cacheKey, success, totalLoaded, totalFiles) {
+              console.log("loading: " + progress + "%");
+              // game.text.setText("loading: " + progress + "%");
+              // this.preparing.destroy();
+          }
+
+          this.scaleForDevice = function(){
+              device = new Phaser.Device();
+          },
+
+          this.loadComplete = function() {
+              console.log('loadComplete');
+          }
+
           this.create = function () {
-            game.state.start("main");
+              game.state.start('main');
           };
-        };
+      };
       
         this.states.main = function (game) {
           this.create = function () {
